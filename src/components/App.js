@@ -1,5 +1,6 @@
 import "../index.css";
 import { useEffect, useState } from "react";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,9 +10,14 @@ import CurrentUserContext from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import Register from "./Register";
+import ProtectedRoute from "./ProtectedRoute";
+import Login from "./Login";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
+  // const [loggedIn, setLoggedIn] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -21,6 +27,7 @@ function App() {
     caption: "",
     link: "",
   });
+  const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
@@ -31,6 +38,10 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const handleSigningUp = () => {
+    setIsInfoTooltipPopupOpen(true);
+  };
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
@@ -116,23 +127,44 @@ function App() {
       caption: "",
       link: "",
     });
+    setIsInfoTooltipPopupOpen(false);
   };
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          cards={cards}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
-        <Footer />
+        <BrowserRouter>
+          <Header />
+          <main className="content">
+            <Switch>
+              <Route path="/sign-up">
+                <Register onSigningUp={handleSigningUp} />
+              </Route>
+              <Route path="/sign-in">
+                <Login />
+              </Route>
+              <ProtectedRoute
+                path="/"
+                component={Main}
+                loggedIn={currentUser}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                cards={cards}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+              />
+            </Switch>
+          </main>
+          <Footer />
+        </BrowserRouter>
       </div>
+      <InfoTooltip
+        isOpen={isInfoTooltipPopupOpen}
+        onClose={closeAllPopups}
+        isSuccessful={true}
+      />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}

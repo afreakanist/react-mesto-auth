@@ -1,0 +1,11 @@
+.popup__status {
+  font-family: Inter;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: black;
+  margin: 32px auto 24px;
+}
