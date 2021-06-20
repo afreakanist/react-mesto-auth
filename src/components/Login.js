@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { withRouter } from "react-router-dom";
 
-function Login() {
+function Login({ onLogin }) {
   const [userData, setUserData] = useState({});
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -9,29 +9,29 @@ function Login() {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted!!!");
+    onLogin(userData);
   };
 
   return (
-    <div className="sign-up">
-      <h2 className="sign-up__title">Вход</h2>
+    <div className="user-form">
+      <h2 className="user-form__title">Вход</h2>
       <form
-        className="sign-up__form"
+        className="user-form__form"
         name="edit"
         noValidate
         onSubmit={handleSubmit}
       >
         <input
-          className="sign-up__input"
+          className="user-form__input"
           id="email"
           name="email"
-          type="text"
+          type="email"
           placeholder="Email"
           value={userData.email || ""}
           onChange={handleChange}
         />
         <input
-          className="sign-up__input"
+          className="user-form__input"
           id="password"
           name="password"
           type="text"
@@ -39,7 +39,7 @@ function Login() {
           value={userData.password || ""}
           onChange={handleChange}
         />
-        <button type="submit" className="sign-up__submit-button">
+        <button type="submit" className="user-form__submit-button">
           Войти
         </button>
       </form>
