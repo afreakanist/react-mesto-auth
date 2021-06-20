@@ -13,8 +13,10 @@
 
 @media screen and (max-width: 540px) {
   .popup__close-button {
+    margin: 8px;
+    box-sizing: border-box;
     width: 26px;
     height: 26px;
-    right: 0;
+    left: calc(100% - 34px);
   }
 }

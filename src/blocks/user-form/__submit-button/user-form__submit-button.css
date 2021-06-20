@@ -1,4 +1,4 @@
-.sign-up__submit-button {
+.user-form__submit-button {
   font-family: Inter;
   font-size: 18px;
   font-style: normal;
@@ -16,13 +16,13 @@
   transition: opacity 0.4s ease-in-out;
 }
 
-.sign-up__submit-button:hover {
+.user-form__submit-button:hover {
   opacity: 0.8;
   cursor: pointer;
 }
 
 @media screen and (max-width: 540px) {
-  .sign-up__submit-button {
+  .user-form__submit-button {
     font-size: 14px;
     line-height: 17px;
     width: 238px;

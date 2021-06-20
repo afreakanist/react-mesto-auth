@@ -1,4 +1,4 @@
-.sign-up__alt-option {
+.user-form__redirect-link {
   font-family: Inter;
   font-size: 14px;
   font-style: normal;
@@ -7,4 +7,5 @@
   letter-spacing: 0em;
   text-align: center;
   color: #ffffff;
+  text-decoration: none;
 }

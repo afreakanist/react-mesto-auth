@@ -1,4 +1,4 @@
-.header__redirect-link {
+.header__logout {
   font-family: Inter;
   font-size: 18px;
   font-style: normal;
@@ -6,13 +6,13 @@
   line-height: 22px;
   letter-spacing: 0em;
   text-align: right;
-  color: white;
+  color: #a9a9a9;
   text-decoration: none;
   margin: 6px 0 0;
 }
 
 @media (max-width: 540px) {
-  .header__redirect-link {
+  .header__logout {
     font-size: 14px;
     line-height: 17px;
   }
