@@ -51,12 +51,16 @@ function App() {
   const handleTokenCheck = () => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
-      auth.checkToken(jwt).then((res) => {
-        if (res) {
-          setIsLoggedIn(true);
-          history.push("/");
-        }
-      });
+      auth
+        .checkToken(jwt)
+        .then((data) => data)
+        .then((res) => {
+          if (res) {
+            setIsLoggedIn(true);
+            history.push("/");
+          }
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -66,6 +70,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           localStorage.setItem("jwt", data.token);
+          localStorage.setItem("email", email);
           setIsLoggedIn(true);
           setCurrentUser((prev) => ({ ...prev, email }));
           history.push("/");
@@ -79,7 +84,7 @@ function App() {
     auth
       .register(password, email)
       .then((res) => {
-        if (!res.error) {
+        if (res.data) {
           setInfoTooltip({
             isOpen: true,
             isSuccessful: true,
@@ -93,14 +98,13 @@ function App() {
         }
         return res;
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("jwt");
+    localStorage.removeItem("email");
   };
 
   const handleEditProfileClick = () => {

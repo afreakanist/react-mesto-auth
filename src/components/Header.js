@@ -1,11 +1,9 @@
-import { useContext } from "react";
-import CurrentUserContext from "../contexts/CurrentUserContext";
 import { Link, useLocation } from "react-router-dom";
 import logo from "../images/logo.svg";
 
 function Header({ isLoggedIn, onLogout }) {
   const { pathname } = useLocation();
-  const currentUser = useContext(CurrentUserContext);
+  const email = localStorage.getItem("email");
 
   return (
     <header className="header">
@@ -21,7 +19,7 @@ function Header({ isLoggedIn, onLogout }) {
         </Link>
       ) : (
         <div className="header__group">
-          <p className="header__email">{currentUser.email}</p>
+          <p className="header__email">{email}</p>
           <Link to="/sign-in" onClick={onLogout} className="header__logout">
             Выйти
           </Link>

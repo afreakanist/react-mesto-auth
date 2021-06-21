@@ -15,12 +15,7 @@ function Login({ onLogin }) {
   return (
     <div className="user-form">
       <h2 className="user-form__title">Вход</h2>
-      <form
-        className="user-form__form"
-        name="edit"
-        noValidate
-        onSubmit={handleSubmit}
-      >
+      <form className="user-form__form" name="edit" onSubmit={handleSubmit}>
         <input
           className="user-form__input"
           id="email"
@@ -29,6 +24,7 @@ function Login({ onLogin }) {
           placeholder="Email"
           value={userData.email || ""}
           onChange={handleChange}
+          required
         />
         <input
           className="user-form__input"
@@ -38,6 +34,7 @@ function Login({ onLogin }) {
           placeholder="Пароль"
           value={userData.password || ""}
           onChange={handleChange}
+          required
         />
         <button type="submit" className="user-form__submit-button">
           Войти

@@ -18,7 +18,9 @@ function PopupWithForm({
       if (event.key === "Escape") onClose();
     };
 
-    document.addEventListener("keydown", handleEscClick);
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscClick);
+    }
 
     return () => {
       document.removeEventListener("keydown", handleEscClick);
@@ -41,7 +43,6 @@ function PopupWithForm({
         <form
           className={`popup__form popup__form_type_${name}`}
           name="edit"
-          noValidate
           onSubmit={onSubmit}
         >
           {children}
