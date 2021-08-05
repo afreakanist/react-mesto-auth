@@ -1,4 +1,4 @@
-export const BASE_URL = "https://auth.nomoreparties.co";
+export const BASE_URL = "http://localhost:5500";
 
 const getResponseData = (res) => {
   return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
@@ -9,6 +9,8 @@ export const register = (password, email) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Origin": "http://localhost:3000",
+      "Host": "http://localhost:5500",
     },
     body: JSON.stringify({ password, email }),
   }).then((res) => res.json());
@@ -19,6 +21,8 @@ export const authorize = (password, email) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Origin": "http://localhost:3000",
+      "Host": "http://localhost:5500",
     },
     body: JSON.stringify({ password, email }),
   }).then((res) => getResponseData(res));
@@ -29,7 +33,9 @@ export const checkToken = (token) => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Origin": "http://localhost:3000",
+      "Host": "localhost:5500",
+      "Authorization": `Bearer ${token}`,
     },
   }).then((res) => getResponseData(res));
 };

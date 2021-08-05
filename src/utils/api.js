@@ -9,17 +9,23 @@ class Api {
     return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getUserInfo() {
+  getUserInfo(token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
     }).then((res) => this._getResponseData(res));
   }
 
-  editUserInfo(userData) {
+  editUserInfo(userData, token) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify({
         name: `${userData.name}`,
         about: `${userData.about}`,
@@ -27,27 +33,36 @@ class Api {
     }).then((res) => this._getResponseData(res));
   }
 
-  updateAvatar(link) {
+  updateAvatar(link, token) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify({
         avatar: link,
       }),
     }).then((res) => this._getResponseData(res));
   }
 
-  getInitialCards() {
+  getInitialCards(token) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "GET",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
     }).then((res) => this._getResponseData(res));
   }
 
-  postNewCard(cardData) {
+  postNewCard(cardData, token) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
       body: JSON.stringify({
         name: `${cardData.name}`,
         link: `${cardData.link}`,
@@ -55,25 +70,30 @@ class Api {
     }).then((res) => this._getResponseData(res));
   }
 
-  changeLikeCardStatus(cardId, isLiked) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+  changeLikeCardStatus(cardId, isLiked, token) {
+    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
       method: isLiked ? "DELETE" : "PUT",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
     }).then((res) => this._getResponseData(res));
   }
 
-  deleteCard(cardId) {
+  deleteCard(cardId, token) {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
-      headers: this._headers,
+      headers: {
+        ...this._headers,
+        "Authorization": `Bearer ${token}`
+      },
     }).then((res) => this._getResponseData(res));
   }
 }
 
 const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-23",
+  baseUrl: "http://localhost:5500",
   headers: {
-    authorization: "4e889ddc-d2d9-4f86-9d14-e5fd9f0022dc",
     "Content-Type": "application/json",
   },
 });

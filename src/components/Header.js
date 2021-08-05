@@ -12,15 +12,15 @@ function Header({ isLoggedIn, onLogout }) {
       </Link>
       {!isLoggedIn ? (
         <Link
-          to={pathname === "/sign-in" ? "/sign-up" : "/sign-in"}
+          to={pathname === "/signin" ? "/signup" : "/signin"}
           className="header__redirect-link"
         >
-          {pathname === "/sign-in" ? "Регистрация" : "Войти"}
+          {pathname === "/signin" ? "Регистрация" : "Войти"}
         </Link>
       ) : (
         <div className="header__group">
           <p className="header__email">{email}</p>
-          <Link to="/sign-in" onClick={onLogout} className="header__logout">
+          <Link to="/signin" onClick={onLogout} className="header__logout">
             Выйти
           </Link>
         </div>

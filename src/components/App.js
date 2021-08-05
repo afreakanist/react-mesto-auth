@@ -40,20 +40,22 @@ function App() {
   }, []);
 
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
+    if (isLoggedIn) {
+      const token = localStorage.getItem('jwt');
+      Promise.all([api.getUserInfo(token) , api.getInitialCards(token)])
       .then(([userData, cardsData]) => {
         setCurrentUser(userData);
         setCards([...cardsData]);
       })
       .catch((err) => console.log(err));
-  }, []);
+    }
+  }, [isLoggedIn]);
 
   const handleTokenCheck = () => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
       auth
         .checkToken(jwt)
-        .then((data) => data)
         .then((res) => {
           if (res) {
             setIsLoggedIn(true);
@@ -83,20 +85,20 @@ function App() {
   const handleRegister = ({ password, email }) => {
     auth
       .register(password, email)
-      .then((res) => {
-        if (res.data) {
+      .then(({_id, email}) => {
+        if (_id && email) {
           setInfoTooltip({
             isOpen: true,
             isSuccessful: true,
           });
-          history.push("/sign-in");
+          history.push("/signin");
         } else {
           setInfoTooltip({
             isOpen: true,
             isSuccessful: false,
           });
         }
-        return res;
+        return {_id, email};
       })
       .catch((err) => console.log(err));
   };
@@ -128,10 +130,11 @@ function App() {
   };
 
   const handleUpdateUser = (userData) => {
+    const token = localStorage.getItem('jwt');
     api
-      .editUserInfo(userData)
-      .then((data) => {
-        setCurrentUser(data);
+      .editUserInfo(userData, token)
+      .then((newUserData) => {
+        setCurrentUser((prev) => ({ ...prev, ...newUserData }));
         closeAllPopups();
       })
       .catch((err) => console.log(`Error in profile editing: ${err}`))
@@ -139,10 +142,11 @@ function App() {
   };
 
   const handleUpdateAvatar = (link) => {
+    const token = localStorage.getItem('jwt');
     api
-      .updateAvatar(link)
-      .then((data) => {
-        setCurrentUser(data);
+      .updateAvatar(link, token)
+      .then(({ avatar }) => {
+        setCurrentUser((prev) => ({ ...prev, avatar }));
         closeAllPopups();
       })
       .catch((err) => console.log(`Error in avatar updating: ${err}`))
@@ -150,21 +154,23 @@ function App() {
   };
 
   const handleAddPlaceSubmit = (cardData) => {
+    const token = localStorage.getItem('jwt');
     api
-      .postNewCard(cardData)
+      .postNewCard(cardData, token)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.log(`Error in avatar updating: ${err}`))
+      .catch((err) => console.log(`Error in card posting: ${err}`))
       .finally(() => setIsPending(false));
   };
 
   const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const token = localStorage.getItem('jwt');
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     api
-      .changeLikeCardStatus(card._id, isLiked)
+      .changeLikeCardStatus(card._id, isLiked, token)
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => (c._id === card._id ? newCard : c))
@@ -174,8 +180,9 @@ function App() {
   };
 
   const handleCardDelete = (card) => {
+    const token = localStorage.getItem('jwt');
     api
-      .deleteCard(card._id)
+      .deleteCard(card._id, token)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== card._id));
       })
@@ -202,10 +209,10 @@ function App() {
         <Header isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         <main className="content">
           <Switch>
-            <Route path="/sign-up">
+            <Route path="/signup">
               <Register onRegister={handleRegister} />
             </Route>
-            <Route path="/sign-in">
+            <Route path="/signin">
               <Login onLogin={handleLogin} />
             </Route>
             <ProtectedRoute
